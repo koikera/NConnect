@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="../nconnect_Infraestructure/nconnect_Infraestructure.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="../nconnect_Domain/nconnect_Domain.csproj"/>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:nconnect/constants/constants.dart';
+
+class LoginFormWidget extends StatelessWidget {
+  const LoginFormWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Login", 
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Email',
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: const InputDecoration(
+                      hintText: 'Senha',
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
+                  Row(
+                    textDirection: TextDirection.ltr,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: ElevatedButton.icon(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith((states) => textColor),
+                              ),
+                              onPressed: () {},
+                              icon: const Icon(Icons.window, color: Colors.white),
+                              label: const Text("Microsoft", style: TextStyle(color: Colors.white),),
+                          ),
+                      ),
+                      Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith((states) => textColor),
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/chatlist');
+                              },
+                              child: const Text("Login", style: TextStyle(color: Colors.white),),
+                          ),
+                      ),
+                    ],    
+                  ),
+                  Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30.0),
+                            child: TextButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                              ),
+                              onPressed: () {},
+                              child: const Text("Esqueceu a sua senha?", style: TextStyle(color: textColor),),
+                          ),
+                      ),
+                ],
+              ),
+            )
+          );
+  }
+}
