@@ -1,11 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nconnect/constants/constants.dart';
+import 'package:nconnect/models/dominioModel.dart';
+
 
 class DominioWidget extends StatelessWidget {
   const DominioWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final TextEditingController _searchController = TextEditingController();
+
+    void _performSearch() {
+    final String query = _searchController.text;
+    firestore.collection('dominios').where('Dominio', isEqualTo: query).get().then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        // Se pelo menos um documento corresponder ao nome, navegue para outra tela
+        Navigator.pushNamed(context, '/login');
+      } else {
+        const snackBar = SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text('Dominio não encontrado, contate um administrador', style: TextStyle(fontSize: 17),),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
+  }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("N-Connect", style: TextStyle(color: textColor, fontWeight: FontWeight.w700),),
@@ -27,15 +52,16 @@ class DominioWidget extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    controller: _searchController,
                     decoration: const InputDecoration(
-                      hintText: 'Dominio@empresa.com',
+                      hintText: 'Dominio@empresa.com'
                     ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
+                    validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Este campo não pode estar vazio.";
+                    }
+                    return null;
+                  },
                   ),
                   Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -44,7 +70,7 @@ class DominioWidget extends StatelessWidget {
                             backgroundColor: MaterialStateColor.resolveWith((states) => textColor),
                           ),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/login');
+                            _performSearch();
                           },
                           child: const Text("Avancar", style: TextStyle(color: Colors.white),),
                       ),

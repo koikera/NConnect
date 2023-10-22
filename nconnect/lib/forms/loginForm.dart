@@ -1,11 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nconnect/constants/constants.dart';
+import 'package:nconnect/models/authModel.dart';
 
 class LoginFormWidget extends StatelessWidget {
   const LoginFormWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final TextEditingController email = TextEditingController();
+    final TextEditingController senha = TextEditingController();
+
+    Future<void> signInWithEmailAndPassword() async {
+        try {
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email.text.toLowerCase(),
+            password: senha.text,
+          );
+
+          Navigator.pushNamed(context, '/chatlist');
+          // O usuário foi autenticado com sucesso
+        } catch (e) {
+          // Ocorreu um erro durante a autenticação
+          const snackBar = SnackBar(
+          backgroundColor: Colors.red,
+
+          content: Text("Usuario nao encontrado!", style: TextStyle(fontSize: 17),),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          print(e);
+        }
+      }
     return Form(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -21,6 +47,7 @@ class LoginFormWidget extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    controller: email,
                     decoration: const InputDecoration(
                       hintText: 'Email',
                     ),
@@ -32,6 +59,7 @@ class LoginFormWidget extends StatelessWidget {
                     },
                   ),
                   TextFormField(
+                    controller: senha,
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -66,8 +94,8 @@ class LoginFormWidget extends StatelessWidget {
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateColor.resolveWith((states) => textColor),
                               ),
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/chatlist');
+                              onPressed: (){
+                                signInWithEmailAndPassword();
                               },
                               child: const Text("Login", style: TextStyle(color: Colors.white),),
                           ),

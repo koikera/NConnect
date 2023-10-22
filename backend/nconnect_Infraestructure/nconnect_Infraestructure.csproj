@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="../nconnect_Domain/nconnect_Domain.csproj"/>
+    <Import Include="../nconnect_Domain/nconnect_Domain.csproj"/>
   </ItemGroup>
 
 </Project>
