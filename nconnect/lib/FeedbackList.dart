@@ -199,7 +199,12 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
                         title: Text('Perfil'),
                       ),
                       onTap: (){
-                        Navigator.pushNamed(context, "/perfil");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PerfilWidget(isPsicologo: isPsicologo),
+                          ),
+                        );
                       },
                     ),
                     PopupMenuItem(

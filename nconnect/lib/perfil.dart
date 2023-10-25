@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nconnect/constants/constants.dart';
 
 class PerfilWidget extends StatelessWidget {
-  bool isPsicologo = false;
+  bool isPsicologo;
   PerfilWidget({required this.isPsicologo});
 
   @override

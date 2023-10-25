@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginWidget(),
         '/feedbackList': (context) => const FeedbackListWidget(),
         '/feedback': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: "")),
-        '/perfil': (context) => PerfilWidget(isPsicologo: false)
         //'/dominio': (context) => const DominioWidget()
       },
       initialRoute: verificarLogin(),
