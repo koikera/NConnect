@@ -26,7 +26,7 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
           children: [
             CircleAvatar(
               radius: 60,
-              backgroundImage: AssetImage('assets/avatar_image.png'), // Substitua pelo caminho da imagem do avatar
+              child: Text(widget.feedbackModel.EnviadoPor[0].toUpperCase(), style: TextStyle(fontSize: 20)),
             ),
             SizedBox(height: 20),
             ListTile(

@@ -224,7 +224,10 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
       body: RefreshIndicator(
         onRefresh: () async {
           // Coloque aqui a lógica de atualização dos dados.
-          await GetAllFeedbakcs(); // Substitua _refreshData() pela função que atualiza os dados.
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const FeedbackListWidget()),
+          );
         },
         child: FutureBuilder<ListView>(
           future: GetAllFeedbakcs(),
