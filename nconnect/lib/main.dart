@@ -9,6 +9,7 @@ import 'package:nconnect/dominio.dart';
 import 'package:nconnect/firebase_options.dart';
 import 'package:nconnect/models/FeedbackModel.dart';
 import 'package:nconnect/models/dominioModel.dart';
+import 'package:nconnect/perfil.dart';
 import 'firebase_options.dart';
 import 'package:nconnect/login.dart';
 
@@ -55,7 +56,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginWidget(),
         '/feedbackList': (context) => const FeedbackListWidget(),
-        '/chat': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: ""),),
+        '/feedback': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: "")),
+        '/perfil': (context) => PerfilWidget(isPsicologo: false)
         //'/dominio': (context) => const DominioWidget()
       },
       initialRoute: verificarLogin(),

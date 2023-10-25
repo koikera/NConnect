@@ -24,6 +24,11 @@ class _FeedbackWidgetState extends State<FeedbackWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage('assets/avatar_image.png'), // Substitua pelo caminho da imagem do avatar
+            ),
+            SizedBox(height: 20),
             ListTile(
               title: Text(
                 'Enviado por:',

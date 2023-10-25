@@ -7,6 +7,7 @@ import 'package:nconnect/Feedback.dart';
 import 'package:nconnect/constants/constants.dart';
 import 'package:nconnect/forms/NovoFeedback.dart';
 import 'package:nconnect/models/FeedbackModel.dart';
+import 'package:nconnect/perfil.dart';
 
 class FeedbackListWidget extends StatefulWidget {
   const FeedbackListWidget({super.key});
@@ -131,7 +132,6 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
     }
   }
 
-
   String _selectedValue = '1';
 
   @override
@@ -166,12 +166,20 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
                         );
                       },
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: '2',
-                      child: ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text('Configurações'),
+                      child: const ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text('Perfil'),
                       ),
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PerfilWidget(isPsicologo: isPsicologo),
+                          ),
+                        );
+                      },
                     ),
                     PopupMenuItem(
                       value: '3',
@@ -184,12 +192,15 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
                   ];
                 } else {
                   return [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: '2',
-                      child: ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text('Configurações'),
+                      child: const ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text('Perfil'),
                       ),
+                      onTap: (){
+                        Navigator.pushNamed(context, "/perfil");
+                      },
                     ),
                     PopupMenuItem(
                       value: '3',
