@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nconnect/constants/constants.dart';
 import 'package:nconnect/models/authModel.dart';
 
@@ -9,13 +10,13 @@ class LoginFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final TextEditingController email = TextEditingController();
     final TextEditingController senha = TextEditingController();
 
     Future<void> signInWithEmailAndPassword() async {
         try {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await firebaseAuth.signInWithEmailAndPassword(
             email: email.text.toLowerCase(),
             password: senha.text,
           );
@@ -81,13 +82,14 @@ class LoginFormWidget extends StatelessWidget {
                     children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: ElevatedButton.icon(
+                            child: ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateColor.resolveWith((states) => textColor),
                               ),
-                              onPressed: () {},
-                              icon: const Icon(Icons.window, color: Colors.white),
-                              label: const Text("Microsoft", style: TextStyle(color: Colors.white),),
+                              onPressed: (){
+                                Navigator.pushNamed(context, '/cadastro');
+                              },
+                              child: const Text("Cadastre-se", style: TextStyle(color: Colors.white),),
                           ),
                       ),
                       Padding(
@@ -105,15 +107,17 @@ class LoginFormWidget extends StatelessWidget {
                     ],    
                   ),
                   Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-                              ),
-                              onPressed: () {},
-                              child: const Text("Esqueceu a sua senha?", style: TextStyle(color: textColor),),
+                        padding: const EdgeInsets.symmetric(vertical: 30.0),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
                           ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/resetSenha');
+                          },
+                          child: const Text("Esqueceu a sua senha?", style: TextStyle(color: textColor),),
                       ),
+                  ),
                 ],
               ),
             )

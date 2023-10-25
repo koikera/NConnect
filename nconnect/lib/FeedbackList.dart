@@ -77,7 +77,7 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
         }
     } else {
       if(listaEnviadoPor.docs.isNotEmpty){
-        for (final documento in documentos) {
+        for (final documento in listaEnviadoPor.docs) {
           final data = documento.data() as Map<String, dynamic>;// Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
           final EnviadoPor = data['EnviadoPor'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
           final Feedback = data['Feedback'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.

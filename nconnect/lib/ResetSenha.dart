@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nconnect/constants/constants.dart';
-import 'package:nconnect/forms/loginForm.dart';
+import 'package:nconnect/forms/esqueceuSenha.dart';
 
-class LoginWidget extends StatelessWidget {
-  const LoginWidget({super.key});
+class ResetSenhaWidget extends StatelessWidget {
+  const ResetSenhaWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class LoginWidget extends StatelessWidget {
         backgroundColor: primary,
       ),
       body: const Center(
-        child:  LoginFormWidget()
+        child:  EsqueceuSenhaWidget()
       )
     );
   }

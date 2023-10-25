@@ -28,7 +28,7 @@ class _NovoFeedbackWidgetState extends State<NovoFeedbackWidget> {
         'EnviadoPor': firebaseAuth.currentUser?.email,
         'Feedback': _textEditingController.text,
         'Nota': rating,
-        'Para': _ParaController.text
+        'Para': _ParaController.text.toLowerCase()
       };
 
       // Adicione os dados à coleção "grupos"

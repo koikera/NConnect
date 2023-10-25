@@ -17,7 +17,7 @@ class PerfilWidget extends StatelessWidget {
 
     Future<void> resetPassword() async {
       try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: userEmail ?? "");
+        await firebaseAuth.sendPasswordResetEmail(email: userEmail ?? "");
         // O documento foi adicionado com sucesso
         Fluttertoast.showToast(
           msg: 'Foi enviado um email de redefinição de senha para o endereço $userEmail. Por favor, verifique sua caixa de entrada e siga as instruções para redefinir sua senha.',

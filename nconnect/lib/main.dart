@@ -4,8 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nconnect/Feedback.dart';
 import 'package:nconnect/FeedbackList.dart';
+import 'package:nconnect/ResetSenha.dart';
 import 'package:nconnect/constants/constants.dart';
 import 'package:nconnect/dominio.dart';
+import 'package:nconnect/fazerCadastro.dart';
 import 'package:nconnect/firebase_options.dart';
 import 'package:nconnect/models/FeedbackModel.dart';
 import 'package:nconnect/models/dominioModel.dart';
@@ -57,6 +59,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginWidget(),
         '/feedbackList': (context) => const FeedbackListWidget(),
         '/feedback': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: "")),
+        '/resetSenha':(context) => const ResetSenhaWidget(),
+        '/cadastro':(context) => const FazerCadastroWidget()
         //'/dominio': (context) => const DominioWidget()
       },
       initialRoute: verificarLogin(),
