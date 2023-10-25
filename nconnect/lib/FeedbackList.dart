@@ -1,54 +1,29 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nconnect/Feedback.dart';
 import 'package:nconnect/constants/constants.dart';
-import 'package:nconnect/forms/novoGrupoForm.dart';
-import 'package:nconnect/models/groupModel.dart';
+import 'package:nconnect/forms/NovoFeedback.dart';
+import 'package:nconnect/models/FeedbackModel.dart';
 
-class ChatListWidget extends StatefulWidget {
-  const ChatListWidget({super.key});
+class FeedbackListWidget extends StatefulWidget {
+  const FeedbackListWidget({super.key});
 
   @override
-  State<ChatListWidget> createState() => _ChatListWidgetState();
+  State<FeedbackListWidget> createState() => _FeedbackListWidgetState();
 }
 
-class _ChatListWidgetState extends State<ChatListWidget> {
+class _FeedbackListWidgetState extends State<FeedbackListWidget> {
   
   final user = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 
-  Future<List<dynamic>> GetAllChats() async {
-    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('chats')
-        .where('Permissoes', arrayContains: user?.email)
-        .get();
-
-    final List<dynamic> listaConversa = [];
-
-    for (final documento in querySnapshot.docs) {
-      final data = documento.data() as Map<String, dynamic>?;
-      if (data != null) {
-        final conversa = data['Conversa'] as Map<String, dynamic>?;
-
-        if (conversa != null) {
-          // Itera pelos valores do mapa e os adiciona à lista
-          conversa.forEach((key, value) {
-            listaConversa.add(value);
-          });
-        }
-      }
-    }
-
-    return listaConversa;
-  }
-
-final List<Widget> listTiles = [];
-
-
-  Future<ListView> ValidarUsuario() async {
+  Future<ListView> GetAllFeedbakcs() async {
     final List<Widget> listTiles = [];
-    final QuerySnapshot querySnapshot = await firestore.collection('chats').where('Permissoes', arrayContains: user?.email).get();
+    final QuerySnapshot querySnapshot = await firestore.collection('feedbacks').where('Para', isEqualTo: user?.email).get();
     final List<QueryDocumentSnapshot> documentos = querySnapshot.docs;
 
     if(documentos.isNotEmpty){
@@ -57,18 +32,32 @@ final List<Widget> listTiles = [];
     // Lista para armazenar os ListTiles
 
     for (final documento in documentos) {
-      final data = documento.data() as Map<String, dynamic>;
-      final conversas = data['Conversas'] as Map<String, dynamic>; // Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
-      final titulo = conversas['Titulo'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.
-
+      final data = documento.data() as Map<String, dynamic>;// Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
+      final EnviadoPor = data['EnviadoPor'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+      final Feedback = data['Feedback'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+      final Para = data['Para'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+      final Nota = data['Nota'] as int; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+      final FeedbackModel feedbackModel = new FeedbackModel(EnviadoPor: EnviadoPor, Feedback: Feedback, Nota: Nota, Para: Para);
           listTiles.add(
             ListTile(
-              leading: CircleAvatar(child: Text(titulo[0])),
-              title: Text(titulo),
-              subtitle: const Text("Mensagem"),
+              leading: CircleAvatar(child: Text(EnviadoPor[0].toUpperCase())),
+              title: Text(EnviadoPor),
+              subtitle: Row(
+                children: List.generate(5, (index) {
+                  return Icon(
+                      index < Nota ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                    );
+                }),
+              ),
               trailing: const Icon(Icons.arrow_circle_right_outlined),
               onTap: () {
-                Navigator.pushNamed(context, '/chat');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FeedbackWidget(feedbackModel: feedbackModel),
+                  ),
+                );
               },
             ),
           );
@@ -84,6 +73,7 @@ final List<Widget> listTiles = [];
       children: [],
     );
   }
+
 
   Future<void> Logout() async {
     try {
@@ -102,7 +92,7 @@ final List<Widget> listTiles = [];
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("N-Connect", style: TextStyle(color: textColor, fontWeight: FontWeight.w700),),
+        title: const Text("Feedbacks", style: TextStyle(color: textColor, fontWeight: FontWeight.w700),),
         backgroundColor: primary,
         actions: [
             PopupMenuButton<String>(
@@ -116,19 +106,19 @@ final List<Widget> listTiles = [];
                   value: '1',
                   child: const ListTile(
                     leading: Icon(Icons.add),
-                    title: Text('Novo Grupo'),
+                    title: Text('Novo Feedback'),
                   ),
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return NovoGrupoFormWidget();
+                        return NovoFeedbackWidget();
                       },
                     );
                   },
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: '2',
                   child: ListTile(
                     leading: Icon(Icons.settings),
@@ -137,7 +127,7 @@ final List<Widget> listTiles = [];
                 ),
                 PopupMenuItem(
                   value: '3',
-                  child: ListTile(
+                  child: const ListTile(
                     leading: Icon(Icons.logout),
                     title: Text('Logout'),
                   ),
@@ -150,17 +140,17 @@ final List<Widget> listTiles = [];
       body: RefreshIndicator(
         onRefresh: () async {
           // Coloque aqui a lógica de atualização dos dados.
-          await ValidarUsuario(); // Substitua _refreshData() pela função que atualiza os dados.
+          await GetAllFeedbakcs(); // Substitua _refreshData() pela função que atualiza os dados.
         },
         child: FutureBuilder<ListView>(
-          future: ValidarUsuario(),
+          future: GetAllFeedbakcs(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Erro: ${snapshot.error}'));
             } else {
-              return snapshot.data ?? ListView(children: [ListTile(title: Text('Nenhum dado disponível'))]);
+              return snapshot.data ?? ListView(children: const [ ListTile(title: Text('Nenhum dado disponível'))]);
             }
           },
         ),

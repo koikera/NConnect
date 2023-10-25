@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:nconnect/chat.dart';
-import 'package:nconnect/chatList.dart';
+import 'package:nconnect/Feedback.dart';
+import 'package:nconnect/FeedbackList.dart';
 import 'package:nconnect/constants/constants.dart';
 import 'package:nconnect/dominio.dart';
 import 'package:nconnect/firebase_options.dart';
+import 'package:nconnect/models/FeedbackModel.dart';
 import 'package:nconnect/models/dominioModel.dart';
 import 'firebase_options.dart';
 import 'package:nconnect/login.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       } else {
         // O usuário não está autenticado.
         // Navegue para a tela de login.
-        return "/dominio";
+        return "/login";
       }
     }
 
@@ -53,9 +54,9 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/login': (context) => const LoginWidget(),
-        '/chatlist': (context) => const ChatListWidget(),
-        '/chat': (context) => const ChatWidget(),
-        '/dominio': (context) => const DominioWidget()
+        '/chatlist': (context) => const FeedbackListWidget(),
+        '/chat': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: ""),),
+        //'/dominio': (context) => const DominioWidget()
       },
       initialRoute: verificarLogin(),
       
