@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       if (fireAuth.currentUser != null) {
         // O usuário já está autenticado e permaneceu conectado.
         // Você pode redirecioná-lo para a tela principal do aplicativo.
-        return "/chatlist";
+        return "/feedbackList";
       } else {
         // O usuário não está autenticado.
         // Navegue para a tela de login.
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/login': (context) => const LoginWidget(),
-        '/chatlist': (context) => const FeedbackListWidget(),
+        '/feedbackList': (context) => const FeedbackListWidget(),
         '/chat': (context) =>  FeedbackWidget(feedbackModel: new FeedbackModel(EnviadoPor: "", Feedback: "", Nota: 0, Para: ""),),
         //'/dominio': (context) => const DominioWidget()
       },

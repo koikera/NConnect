@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nconnect/constants/constants.dart';
@@ -19,7 +20,8 @@ class LoginFormWidget extends StatelessWidget {
             password: senha.text,
           );
 
-          Navigator.pushNamed(context, '/chatlist');
+          Navigator.pushNamed(context, '/feedbackList');
+
           // O usuário foi autenticado com sucesso
         } catch (e) {
           // Ocorreu um erro durante a autenticação

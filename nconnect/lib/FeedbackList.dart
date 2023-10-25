@@ -19,55 +19,101 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
   
   final user = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool isPsicologo = false;
 
 
   Future<ListView> GetAllFeedbakcs() async {
     final List<Widget> listTiles = [];
     final QuerySnapshot querySnapshot = await firestore.collection('feedbacks').where('Para', isEqualTo: user?.email).get();
     final List<QueryDocumentSnapshot> documentos = querySnapshot.docs;
+    final QuerySnapshot listaPsicologos = await firestore.collection('psicologos').where('ListaPsicologos', arrayContains: user?.email).get();
+    final QuerySnapshot listaEnviadoPor = await firestore.collection('feedbacks').where('EnviadoPor', isEqualTo: user?.email).get();
 
-    if(documentos.isNotEmpty){
-      final List<QueryDocumentSnapshot> documentos = querySnapshot.docs;
+    if(listaPsicologos.docs.isNotEmpty){
+      isPsicologo = true;
+      if(documentos.isNotEmpty){
+        final List<QueryDocumentSnapshot> documentos = querySnapshot.docs;
 
-    // Lista para armazenar os ListTiles
+        // Lista para armazenar os ListTiles
 
-    for (final documento in documentos) {
-      final data = documento.data() as Map<String, dynamic>;// Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
-      final EnviadoPor = data['EnviadoPor'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
-      final Feedback = data['Feedback'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
-      final Para = data['Para'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
-      final Nota = data['Nota'] as int; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
-      final FeedbackModel feedbackModel = new FeedbackModel(EnviadoPor: EnviadoPor, Feedback: Feedback, Nota: Nota, Para: Para);
-          listTiles.add(
-            ListTile(
-              leading: CircleAvatar(child: Text(EnviadoPor[0].toUpperCase())),
-              title: Text(EnviadoPor),
-              subtitle: Row(
-                children: List.generate(5, (index) {
-                  return Icon(
-                      index < Nota ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                    );
-                }),
-              ),
-              trailing: const Icon(Icons.arrow_circle_right_outlined),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FeedbackWidget(feedbackModel: feedbackModel),
+        for (final documento in documentos) {
+          final data = documento.data() as Map<String, dynamic>;// Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
+          final EnviadoPor = data['EnviadoPor'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Feedback = data['Feedback'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Para = data['Para'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Nota = data['Nota'] as int; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final FeedbackModel feedbackModel = new FeedbackModel(EnviadoPor: EnviadoPor, Feedback: Feedback, Nota: Nota, Para: Para);
+            
+              listTiles.add(
+                ListTile(
+                  leading: CircleAvatar(child: Text(EnviadoPor[0].toUpperCase())),
+                  title: Text(EnviadoPor),
+                  subtitle: Row(
+                    children: List.generate(5, (index) {
+                      return Icon(
+                          index < Nota ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                        );
+                    }),
                   ),
-                );
-              },
-            ),
+                  trailing: const Icon(Icons.arrow_circle_right_outlined),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackWidget(feedbackModel: feedbackModel),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+
+          // Agora, você pode usar a lista de ListTiles em seu ListView
+          return ListView(
+            children: listTiles,
           );
         }
-
-      // Agora, você pode usar a lista de ListTiles em seu ListView
-      return ListView(
-        children: listTiles,
-      );
+    } else {
+      if(listaEnviadoPor.docs.isNotEmpty){
+        for (final documento in documentos) {
+          final data = documento.data() as Map<String, dynamic>;// Substitua 'Conversas' pelo nome do campo que contém o mapa de conversas.
+          final EnviadoPor = data['EnviadoPor'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Feedback = data['Feedback'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Para = data['Para'] as String; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final Nota = data['Nota'] as int; // Substitua 'Titulo' pelo nome do campo 'Titulo'.// Substitua 'Titulo' pelo nome do campo 'Titulo'.
+          final FeedbackModel feedbackModel = new FeedbackModel(EnviadoPor: EnviadoPor, Feedback: Feedback, Nota: Nota, Para: Para);
+            
+              listTiles.add(
+                ListTile(
+                  leading: CircleAvatar(child: Text(Para[0].toUpperCase())),
+                  title: Text(Para),
+                  subtitle: Row(
+                    children: List.generate(5, (index) {
+                      return Icon(
+                          index < Nota ? Icons.star : Icons.star_border,
+                          color: Colors.amber,
+                        );
+                    }),
+                  ),
+                  trailing: const Icon(Icons.arrow_circle_right_outlined),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FeedbackWidget(feedbackModel: feedbackModel),
+                      ),
+                    );
+                  },
+              ),
+            );
+          }
+          return ListView(
+            children: listTiles,
+          );
+      }
     }
+
 
     return ListView(
       children: [],
@@ -78,7 +124,7 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
   Future<void> Logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushNamed(context, "/dominio");
+      Navigator.pushNamed(context, "/login");
       print("Usuário deslogado com sucesso.");
     } catch (e) {
       print("Erro ao deslogar: $e");
@@ -101,41 +147,63 @@ class _FeedbackListWidgetState extends State<FeedbackListWidget> {
                   _selectedValue = value;
                 });
               },
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem(
-                  value: '1',
-                  child: const ListTile(
-                    leading: Icon(Icons.add),
-                    title: Text('Novo Feedback'),
-                  ),
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return NovoFeedbackWidget();
+              itemBuilder: (BuildContext context) {
+                if (!isPsicologo) {
+                  return [
+                    PopupMenuItem(
+                      value: '1',
+                      child: const ListTile(
+                        leading: Icon(Icons.add),
+                        title: Text('Novo Feedback'),
+                      ),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) {
+                            return NovoFeedbackWidget();
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-                const PopupMenuItem(
-                  value: '2',
-                  child: ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text('Configuracoes'),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: '3',
-                  child: const ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text('Logout'),
-                  ),
-                  onTap: () => {Logout()},
-                ),
-              ],
+                    ),
+                    const PopupMenuItem(
+                      value: '2',
+                      child: ListTile(
+                        leading: Icon(Icons.settings),
+                        title: Text('Configurações'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: '3',
+                      child: const ListTile(
+                        leading: Icon(Icons.logout),
+                        title: Text('Logout'),
+                      ),
+                      onTap: () => {Logout()},
+                    ),
+                  ];
+                } else {
+                  return [
+                    const PopupMenuItem(
+                      value: '2',
+                      child: ListTile(
+                        leading: Icon(Icons.settings),
+                        title: Text('Configurações'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: '3',
+                      child: const ListTile(
+                        leading: Icon(Icons.logout),
+                        title: Text('Logout'),
+                      ),
+                      onTap: () => {Logout()},
+                    ),
+                  ];
+                }
+              },
             )
-          ],
+          ]
       ),
       body: RefreshIndicator(
         onRefresh: () async {
